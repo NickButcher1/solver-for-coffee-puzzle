@@ -16,7 +16,11 @@ class App(private val numOrientations: Int) {
                 if (!inputIds.contains(newPieceId)) {
                     (0 until numOrientations).forEach { newOrientation ->
                         if (pieceData.tiles[newOrientation][newPieceId][3] == rightEdge) {
-                            outputSolution.ids.add((inputIds + newPieceId).toMutableList())
+                            val newArray = IntArray(outputSolution.depth)
+                            inputList.ids[idx].copyInto(newArray, 0, 0)
+                            newArray[inputList.depth] = newPieceId
+                            outputSolution.ids.add(newArray)
+
                             outputSolution.oris.add((inputOris + newOrientation).toMutableList())
                         }
                     }
@@ -40,7 +44,11 @@ class App(private val numOrientations: Int) {
                 if (!inputIds.contains(newPieceId)) {
                     (0 until numOrientations).forEach { newOrientation ->
                         if (pieceData.tiles[newOrientation][newPieceId][0] == bottomEdge) {
-                            outputSolution.ids.add((inputIds + newPieceId).toMutableList())
+                            val newArray = IntArray(outputSolution.depth)
+                            inputList.ids[idx].copyInto(newArray, 0, 0)
+                            newArray[inputList.depth] = newPieceId
+                            outputSolution.ids.add(newArray)
+
                             outputSolution.oris.add((inputOris + newOrientation).toMutableList())
                         }
                     }
@@ -67,7 +75,11 @@ class App(private val numOrientations: Int) {
                         if (pieceData.tiles[newOrientation][newPieceId][3] == rightEdge &&
                             pieceData.tiles[newOrientation][newPieceId][0] == bottomEdge
                         ) {
-                            outputSolution.ids.add((inputIds + newPieceId).toMutableList())
+                            val newArray = IntArray(outputSolution.depth)
+                            inputList.ids[idx].copyInto(newArray, 0, 0)
+                            newArray[inputList.depth] = newPieceId
+                            outputSolution.ids.add(newArray)
+
                             outputSolution.oris.add((inputOris + newOrientation).toMutableList())
                         }
                     }
@@ -106,7 +118,7 @@ class App(private val numOrientations: Int) {
                 // println("Try piece ID: $pieceId, orientation $orientation")
                 var solutions = Solution(1)
 
-                solutions.ids.add(mutableListOf(pieceId))
+                solutions.ids.add(intArrayOf(pieceId))
                 solutions.oris.add(mutableListOf(orientation))
 
                 // First row.
