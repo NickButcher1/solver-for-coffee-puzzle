@@ -1,6 +1,6 @@
 package coffeepuzzle
 
-class App {
+class App(private val numOrientations: Int) {
     private val pieceData = PieceData()
 
     private fun addPieceRight(inputList: Solution, rightCellIdx: Int): Solution {
@@ -10,7 +10,7 @@ class App {
             val rightEdge = pieceData.tiles[inputList.oris[idx][rightCellIdx]][inputList.ids[idx][rightCellIdx]][1]
             (0..35).forEach { newPieceId ->
                 if (!inputList.ids[idx].contains(newPieceId)) {
-                    (0..3).forEach { newOrientation ->
+                    (0 until numOrientations).forEach { newOrientation ->
                         val newLeftEdge = pieceData.tiles[newOrientation][newPieceId][3]
                         if (newLeftEdge == rightEdge) {
                             outputSolution.ids.add((inputList.ids[idx] + newPieceId).toMutableList())
@@ -31,7 +31,7 @@ class App {
             val bottomEdge = pieceData.tiles[inputList.oris[idx][belowCellIdx]][inputList.ids[idx][belowCellIdx]][2]
             (0..35).forEach { newPieceId ->
                 if (!inputList.ids[idx].contains(newPieceId)) {
-                    (0..3).forEach { newOrientation ->
+                    (0 until numOrientations).forEach { newOrientation ->
                         val newTopEdge = pieceData.tiles[newOrientation][newPieceId][0]
                         if (newTopEdge == bottomEdge) {
                             outputSolution.ids.add((inputList.ids[idx] + newPieceId).toMutableList())
@@ -54,7 +54,7 @@ class App {
 
             (0..35).forEach { newPieceId ->
                 if (!inputList.ids[idx].contains(newPieceId)) {
-                    (0..3).forEach { newOrientation ->
+                    (0 until numOrientations).forEach { newOrientation ->
                         val newLeftEdge = pieceData.tiles[newOrientation][newPieceId][3]
                         val newTopEdge = pieceData.tiles[newOrientation][newPieceId][0]
                         if (newLeftEdge == rightEdge && newTopEdge == bottomEdge) {
@@ -71,9 +71,11 @@ class App {
 
     private fun addRowBelow(inputSolutions: Solution, firstCellIdx: Int): Solution {
         var solutions = addPieceBelow(inputSolutions, firstCellIdx)
+        // println("DEPTH: ${solutions.depth}, ${solutions.ids.size}")
 
         (1..5).forEach { idx ->
             solutions = addPieceBelowRight(solutions, firstCellIdx + idx, firstCellIdx + 5 + idx)
+            // println("DEPTH: ${solutions.depth}, ${solutions.ids.size}")
         }
 
         return solutions
@@ -87,38 +89,51 @@ class App {
         // 18 19 20 21 22 23
         // 24 25 26 27 28 29
         // 30 31 32 33 34 35
+        var totalSolutions = 0
+        val allSolutions = Solution(35)
 
-        // Start with a list of all pieces in all orientations in the top left corner.
-        var solutions = Solution(1)
-        (0..3).forEach { orientation ->
-            val tilesForOrientation = pieceData.tiles[orientation]
-            (0 until tilesForOrientation.size).forEach { pieceId ->
+        (0..35).forEach { pieceId ->
+            (0 until numOrientations).forEach { orientation ->
+                // println("Try piece ID: $pieceId, orientation $orientation")
+                var solutions = Solution(1)
+
                 solutions.ids.add(mutableListOf(pieceId))
                 solutions.oris.add(mutableListOf(orientation))
+
+                // First row.
+                (0..4).forEach { idx ->
+                    solutions = addPieceRight(solutions, idx)
+                }
+
+                // Subsequent rows.
+                solutions = addRowBelow(solutions, 0)
+                solutions = addRowBelow(solutions, 6)
+                solutions = addRowBelow(solutions, 12)
+                solutions = addRowBelow(solutions, 18)
+                solutions = addRowBelow(solutions, 24)
+
+                // require(solutions.ids.size == 4) { "Expect one solution, but there are four rotations." }
+
+                // Map IDs from zero-based to one-based.
+                totalSolutions += solutions.ids.size
+                if (solutions.ids.size != 0) {
+                    println("Found ${solutions.ids.size} more solutions")
+                    allSolutions.ids.addAll(solutions.ids)
+                    allSolutions.oris.addAll(solutions.oris)
+                }
             }
         }
-
-        // First row.
-        (0..4).forEach { idx ->
-            solutions = addPieceRight(solutions, idx)
+        // Need to divide by 8.
+        println("Total solutions for $numOrientations orientations: $totalSolutions")
+        allSolutions.ids.indices.forEach { idx ->
+            val solutionIds = allSolutions.ids[idx].map { it + 1 }.toList()
+            println("Pieces: $solutionIds")
+            println("Orientations: ${allSolutions.oris[0]}")
         }
-
-        // Subsequent rows.
-        solutions = addRowBelow(solutions, 0)
-        solutions = addRowBelow(solutions, 6)
-        solutions = addRowBelow(solutions, 12)
-        solutions = addRowBelow(solutions, 18)
-        solutions = addRowBelow(solutions, 24)
-
-        require(solutions.ids.size == 4) { "Expect one solution, but there are four rotations." }
-
-        // Map IDs from zero-based to one-based.
-        val solutionIds = solutions.ids[0].map { it + 1 }.toList()
-        println("Pieces: $solutionIds")
-        println("Orientations: ${solutions.oris[0]}")
     }
 }
 
 fun main() {
-    App().solve()
+    App(4).solve()
+    App(8).solve()
 }

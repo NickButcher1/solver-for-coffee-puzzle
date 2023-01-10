@@ -29,11 +29,19 @@ class PieceData {
         val orientation1tilesList: MutableList<List<Int>> = mutableListOf()
         val orientation2tilesList: MutableList<List<Int>> = mutableListOf()
         val orientation3tilesList: MutableList<List<Int>> = mutableListOf()
+        val orientation4tilesList: MutableList<List<Int>> = mutableListOf()
+        val orientation5tilesList: MutableList<List<Int>> = mutableListOf()
+        val orientation6tilesList: MutableList<List<Int>> = mutableListOf()
+        val orientation7tilesList: MutableList<List<Int>> = mutableListOf()
         tiles = listOf(
             orientation0tilesList,
             orientation1tilesList,
             orientation2tilesList,
-            orientation3tilesList
+            orientation3tilesList,
+            orientation4tilesList,
+            orientation5tilesList,
+            orientation6tilesList,
+            orientation7tilesList
         )
 
         inputLines.indices.forEach { pieceId ->
@@ -80,6 +88,46 @@ class PieceData {
                     c2(char3, char4),
                     c2(char1, char4),
                     c2(char2, char1)
+                )
+            )
+            // 21
+            // 34
+            orientation4tilesList.add(
+                listOf(
+                    c2(char2, char1),
+                    c2(char1, char4),
+                    c2(char3, char4),
+                    c2(char2, char3)
+                )
+            )
+            // 32
+            // 41
+            orientation7tilesList.add(
+                listOf(
+                    c2(char3, char2),
+                    c2(char2, char1),
+                    c2(char4, char1),
+                    c2(char3, char4)
+                )
+            )
+            // 43
+            // 12
+            orientation6tilesList.add(
+                listOf(
+                    c2(char4, char3),
+                    c2(char3, char2),
+                    c2(char1, char2),
+                    c2(char4, char1)
+                )
+            )
+            // 14
+            // 23
+            orientation5tilesList.add(
+                listOf(
+                    c2(char1, char4),
+                    c2(char4, char3),
+                    c2(char2, char3),
+                    c2(char1, char2)
                 )
             )
         }
