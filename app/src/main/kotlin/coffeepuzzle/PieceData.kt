@@ -3,8 +3,6 @@ package coffeepuzzle
 import java.io.File
 
 class PieceData {
-    private val inputLines = File("../input/tiles.txt").useLines { it.toList() }
-
     /**
      * For tile
      *     AB
@@ -22,9 +20,9 @@ class PieceData {
      *
      * Lookup a tile with tiles[orientation][id][edge]
      */
-    val tiles: List<MutableList<List<Int>>>
+    val tiles: List<List<List<Int>>> = buildTilesList()
 
-    init {
+    private fun buildTilesList(): List<List<List<Int>>> {
         val orientation0tilesList: MutableList<List<Int>> = mutableListOf()
         val orientation1tilesList: MutableList<List<Int>> = mutableListOf()
         val orientation2tilesList: MutableList<List<Int>> = mutableListOf()
@@ -33,16 +31,8 @@ class PieceData {
         val orientation5tilesList: MutableList<List<Int>> = mutableListOf()
         val orientation6tilesList: MutableList<List<Int>> = mutableListOf()
         val orientation7tilesList: MutableList<List<Int>> = mutableListOf()
-        tiles = listOf(
-            orientation0tilesList,
-            orientation1tilesList,
-            orientation2tilesList,
-            orientation3tilesList,
-            orientation4tilesList,
-            orientation5tilesList,
-            orientation6tilesList,
-            orientation7tilesList
-        )
+
+        val inputLines = File("../input/tiles.txt").useLines { it.toList() }
 
         inputLines.indices.forEach { pieceId ->
             val pieceChars = inputLines[pieceId]
@@ -131,6 +121,17 @@ class PieceData {
                 )
             )
         }
+
+        return listOf(
+            orientation0tilesList.toList(),
+            orientation1tilesList.toList(),
+            orientation2tilesList.toList(),
+            orientation3tilesList.toList(),
+            orientation4tilesList.toList(),
+            orientation5tilesList.toList(),
+            orientation6tilesList.toList(),
+            orientation7tilesList.toList()
+        )
     }
 
     private fun c2(i1: Int, i2: Int) = 26 * i1 + i2
