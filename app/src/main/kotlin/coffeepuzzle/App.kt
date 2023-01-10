@@ -5,6 +5,9 @@ class App(private val numOrientations: Int) {
 
     private fun addPieceRight(inputList: Solution, rightCellIdx: Int): Solution {
         val outputSolution = Solution(inputList.depth + 1)
+        if (inputList.ids.size == 0) {
+            return outputSolution
+        }
 
         (0 until inputList.ids.size).forEach { idx ->
             val inputIds = inputList.ids[idx]
@@ -36,6 +39,9 @@ class App(private val numOrientations: Int) {
 
     private fun addPieceBelow(inputList: Solution, belowCellIdx: Int): Solution {
         val outputSolution = Solution(inputList.depth + 1)
+        if (inputList.ids.size == 0) {
+            return outputSolution
+        }
 
         (0 until inputList.ids.size).forEach { idx ->
             val inputIds = inputList.ids[idx]
@@ -67,6 +73,9 @@ class App(private val numOrientations: Int) {
 
     private fun addPieceBelowRight(inputList: Solution, belowCellIdx: Int, rightCellIdx: Int): Solution {
         val outputSolution = Solution(inputList.depth + 1)
+        if (inputList.ids.size == 0) {
+            return outputSolution
+        }
 
         (0 until inputList.ids.size).forEach { idx ->
             val inputIds = inputList.ids[idx]
@@ -124,7 +133,7 @@ class App(private val numOrientations: Int) {
 
         (0..35).forEach { pieceId ->
             (0 until numOrientations).forEach { orientation ->
-                // println("Try piece ID: $pieceId, orientation $orientation")
+                // println("Try piece ID: $pieceId, orientation $orientation, solutions found so far $totalSolutions")
                 var solutions = Solution(1)
 
                 solutions.ids.add(intArrayOf(pieceId))
