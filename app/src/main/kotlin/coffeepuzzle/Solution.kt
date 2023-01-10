@@ -6,5 +6,5 @@ package coffeepuzzle
 data class Solution(
     val depth: Int,
     val ids: MutableList<IntArray> = mutableListOf(),
-    val oris: MutableList<MutableList<Int>> = mutableListOf()
+    val oris: MutableList<IntArray> = mutableListOf()
 )
