@@ -7,14 +7,17 @@ class App(private val numOrientations: Int) {
         val outputSolution = Solution(inputList.depth + 1)
 
         (0 until inputList.ids.size).forEach { idx ->
-            val rightEdge = pieceData.tiles[inputList.oris[idx][rightCellIdx]][inputList.ids[idx][rightCellIdx]][1]
+            val inputIds = inputList.ids[idx]
+            val inputOris = inputList.oris[idx]
+
+            val rightEdge = pieceData.tiles[inputOris[rightCellIdx]][inputIds[rightCellIdx]][1]
+
             (0..35).forEach { newPieceId ->
-                if (!inputList.ids[idx].contains(newPieceId)) {
+                if (!inputIds.contains(newPieceId)) {
                     (0 until numOrientations).forEach { newOrientation ->
-                        val newLeftEdge = pieceData.tiles[newOrientation][newPieceId][3]
-                        if (newLeftEdge == rightEdge) {
-                            outputSolution.ids.add((inputList.ids[idx] + newPieceId).toMutableList())
-                            outputSolution.oris.add((inputList.oris[idx] + newOrientation).toMutableList())
+                        if (pieceData.tiles[newOrientation][newPieceId][3] == rightEdge) {
+                            outputSolution.ids.add((inputIds + newPieceId).toMutableList())
+                            outputSolution.oris.add((inputOris + newOrientation).toMutableList())
                         }
                     }
                 }
@@ -28,14 +31,17 @@ class App(private val numOrientations: Int) {
         val outputSolution = Solution(inputList.depth + 1)
 
         (0 until inputList.ids.size).forEach { idx ->
-            val bottomEdge = pieceData.tiles[inputList.oris[idx][belowCellIdx]][inputList.ids[idx][belowCellIdx]][2]
+            val inputIds = inputList.ids[idx]
+            val inputOris = inputList.oris[idx]
+
+            val bottomEdge = pieceData.tiles[inputOris[belowCellIdx]][inputIds[belowCellIdx]][2]
+
             (0..35).forEach { newPieceId ->
-                if (!inputList.ids[idx].contains(newPieceId)) {
+                if (!inputIds.contains(newPieceId)) {
                     (0 until numOrientations).forEach { newOrientation ->
-                        val newTopEdge = pieceData.tiles[newOrientation][newPieceId][0]
-                        if (newTopEdge == bottomEdge) {
-                            outputSolution.ids.add((inputList.ids[idx] + newPieceId).toMutableList())
-                            outputSolution.oris.add((inputList.oris[idx] + newOrientation).toMutableList())
+                        if (pieceData.tiles[newOrientation][newPieceId][0] == bottomEdge) {
+                            outputSolution.ids.add((inputIds + newPieceId).toMutableList())
+                            outputSolution.oris.add((inputOris + newOrientation).toMutableList())
                         }
                     }
                 }
@@ -49,17 +55,20 @@ class App(private val numOrientations: Int) {
         val outputSolution = Solution(inputList.depth + 1)
 
         (0 until inputList.ids.size).forEach { idx ->
-            val rightEdge = pieceData.tiles[inputList.oris[idx][rightCellIdx]][inputList.ids[idx][rightCellIdx]][1]
-            val bottomEdge = pieceData.tiles[inputList.oris[idx][belowCellIdx]][inputList.ids[idx][belowCellIdx]][2]
+            val inputIds = inputList.ids[idx]
+            val inputOris = inputList.oris[idx]
+
+            val rightEdge = pieceData.tiles[inputOris[rightCellIdx]][inputIds[rightCellIdx]][1]
+            val bottomEdge = pieceData.tiles[inputOris[belowCellIdx]][inputIds[belowCellIdx]][2]
 
             (0..35).forEach { newPieceId ->
-                if (!inputList.ids[idx].contains(newPieceId)) {
+                if (!inputIds.contains(newPieceId)) {
                     (0 until numOrientations).forEach { newOrientation ->
-                        val newLeftEdge = pieceData.tiles[newOrientation][newPieceId][3]
-                        val newTopEdge = pieceData.tiles[newOrientation][newPieceId][0]
-                        if (newLeftEdge == rightEdge && newTopEdge == bottomEdge) {
-                            outputSolution.ids.add((inputList.ids[idx] + newPieceId).toMutableList())
-                            outputSolution.oris.add((inputList.oris[idx] + newOrientation).toMutableList())
+                        if (pieceData.tiles[newOrientation][newPieceId][3] == rightEdge &&
+                            pieceData.tiles[newOrientation][newPieceId][0] == bottomEdge
+                        ) {
+                            outputSolution.ids.add((inputIds + newPieceId).toMutableList())
+                            outputSolution.oris.add((inputOris + newOrientation).toMutableList())
                         }
                     }
                 }
@@ -123,7 +132,7 @@ class App(private val numOrientations: Int) {
                 }
             }
         }
-        // Need to divide by 8.
+
         println("Total solutions for $numOrientations orientations: $totalSolutions")
         allSolutions.ids.indices.forEach { idx ->
             val solutionIds = allSolutions.ids[idx].map { it + 1 }.toList()
